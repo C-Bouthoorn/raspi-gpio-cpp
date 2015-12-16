@@ -6,7 +6,6 @@ using namespace std;
 
 class GPIO {
   public:
-    GPIO();
     GPIO(string);
     ~GPIO();
     

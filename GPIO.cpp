@@ -6,12 +6,6 @@
 
 using namespace std;
 
-// Default constructor: pin 4
-GPIO::GPIO() {
-  this->gpionum = "4";
-  this->gpio_export();
-}
-
 // Custom constructor: pin `pin`
 GPIO::GPIO(string pin) {
   this->gpionum = pin;
