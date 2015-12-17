@@ -8,18 +8,22 @@ using namespace std;
 
 class EasyGPIO {
   public:
-    EasyGPIO(string);
+    EasyGPIO(string, int);
     ~EasyGPIO();
-
-    int start(string dir);
-    int stop();
 
     int on();
     int off();
     int get();
+    
+    bool is_on();
+    bool is_off();
+    
+    static const int IN=0;
+    static const int OUT=1;
+    
   private:
     GPIO* gpio;
-    string dir;
+    int dir;
 };
 
 #endif

@@ -1,27 +1,46 @@
 # Compiler
-CC=g++
+CXX=g++
 # Compiler flags
-CFLAGS=-Wall
+CPPFLAGS=-Wall
 
-all: GPIO-test
-easy: EasyGPIO-test
+all: GPIO EasyGPIO
+clean-all: clean clean-easy
+remake-all: clean-all all
 
-clean:
-	rm -f *.o *.gch GPIO-test EasyGPIO-test
-
-# GPIO
+### GPIO
+# Removing / Rebuilding
 remake: clean all
+clean: clean-test
+	rm -f GPIO.o GPIO.hpp.gch
+clean-test:
+	rm -f GPIO-test
+
+# Building GPIO
+GPIO: GPIO.o GPIO.hpp.gch
 	
-GPIO-test: GPIO.o
-	$(CC) $(CFLAGS) -I . -o GPIO-test GPIO-test.cpp
+# Building test [D: GPIO]
+GPIO-test: GPIO-test.cpp   GPIO
+	$(CXX) $(CPPFLAGS) -I . -o GPIO-test GPIO-test.cpp
 	
-GPIO.o:
-	$(CC) $(CFLAGS) -c GPIO.hpp GPIO.cpp
+GPIO.o: GPIO.cpp
+GPIO.hpp.gch: GPIO.hpp
+	$(CXX) $(CPPFLAGS) -c GPIO.hpp
+
+### Easy GPIO
+# Removing / Rebuilding
+remake-easy: clean-easy easy
+clean-easy: clean-easy-test
+	rm -f EasyGPIO.o EasyGPIO.hpp.gch 
+clean-easy-test:
+	rm -f EasyGPIO-test
+
+# Building EasyGPIO
+EasyGPIO: EasyGPIO.o EasyGPIO.hpp.gch
 	
-# Easy GPIO
-remake-easy: clean easy
-EasyGPIO-test: EasyGPIO.o
-	$(CC) $(CFLAGS) -I . -o EasyGPIO-test EasyGPIO-test.cpp
+# Building easy-test [D: EasyGPIO]
+EasyGPIO-test: EasyGPIO-test.cpp   EasyGPIO
+	$(CXX) $(CPPFLAGS) -I . -o EasyGPIO-test EasyGPIO-test.cpp
 	
-EasyGPIO.o: GPIO.o
-	$(CC) $(CFLAGS) -c EasyGPIO.hpp EasyGPIO.cpp
+EasyGPIO.o: EasyGPIO.cpp   GPIO.o
+EasyGPIO.hpp.gch: EasyGPIO.hpp   GPIO.hpp.gch
+	$(CXX) $(CPPFLAGS) -c EasyGPIO.hpp

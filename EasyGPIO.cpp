@@ -7,31 +7,33 @@
 using namespace std;
 
 // Custom constructor: pin `pin`
-EasyGPIO::EasyGPIO(string pin) {
+EasyGPIO::EasyGPIO(string pin, int dir) {
   this->gpio = new GPIO(pin);
-  this->gpio->gpio_export();
+
+  // Set direction
+  if ( !( dir==EasyGPIO::IN || dir==EasyGPIO::OUT )) {
+    cerr << "Invalid direction: '" << dir << "'!" << endl;
+    cerr << "Assume OUT" << endl;
+    dir = EasyGPIO::OUT;
+  }
+  
+  this->dir=dir;
+  
+  string s_dir = ( dir == EasyGPIO::IN ? "IN" : "OUT" );
+  this->gpio->setdir(s_dir);
 }
 
 // When object gets destroyed: Unexport
 EasyGPIO::~EasyGPIO() {
-  this->gpio->gpio_unexport();
-}
-
-// Start pin
-int EasyGPIO::start(string dir) {
-  if( !( dir=="in" || dir=="out") ) {
-    cerr << "Invalid direction: '" << dir << "'!" << endl;
-    return -1;
-  }
-
-  this->dir=dir;
-  return this->gpio->setdir(dir);
+  // Free memory
+  delete this->gpio;
+  this->gpio = NULL;
 }
 
 // Turn on
 int EasyGPIO::on() {
-  if(this->dir=="in") {
-    cerr << "Can't change value of pin when direction is input." << endl;
+  if(this->dir != EasyGPIO::OUT) {
+    cerr << "Can't change value of pin! [Wrong direction]" << endl;
     return -1;
   }
 
@@ -40,26 +42,37 @@ int EasyGPIO::on() {
 
 // Turn on
 int EasyGPIO::off() {
-  if(this->dir=="in") {
-    cerr << "Can't change value of pin when direction is input." << endl;
+  if(this->dir != EasyGPIO::OUT) {
+    cerr << "Can't change value of pin! [Wrong direction]" << endl;
     return -1;
   }
 
   return this->gpio->setval("0");
 }
 
+// Check if pin is on
+bool EasyGPIO::is_on() {
+  return EasyGPIO::get() == 1;
+}
+
+// Check if pin is off
+bool EasyGPIO::is_off() {
+  return EasyGPIO::get() == 0;
+}
+
+// Get value from pin
 int EasyGPIO::get() {
-  if(this->dir=="out") {
-    cerr << "Can't get value of pin when direction is output." << endl;
+  if(this->dir != EasyGPIO::IN) {
+    cerr << "Can't change value of pin! [Wrong direction]" << endl;
     return -1;
   }
 
   string val;
-  int x=this->gpio->getval(val);
+  int x = this->gpio->getval(val);
 
   if(x < 0) {
     return x;
   } else {
-    return atoi(val);
+    return atoi( val.c_str() );
   }
 }
