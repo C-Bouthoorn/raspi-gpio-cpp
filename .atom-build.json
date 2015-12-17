@@ -1,0 +1,15 @@
+{
+  "name": "Build C++",
+  "cmd": "E:\\CodeBlocks\\MinGW\\bin\\g++.exe",
+  "args": [ "-o", "{FILE_ACTIVE_NAME_BASE}", "{FILE_ACTIVE_NAME}" ],
+  "sh": false,
+  "cwd": "{FILE_ACTIVE_PATH}",
+
+  "targets": {
+    "Run": {
+      "cmd": "{FILE_ACTIVE_NAME_BASE}",
+      "sh": false,
+      "cwd": "{FILE_ACTIVE_PATH}"
+    }
+  }
+}
