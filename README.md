@@ -1,5 +1,5 @@
 # raspi-gpio-cpp
-A GPIO framework in C++ to use with the Raspberry Pi.
+A GPIO framework in C++ (and Python) to use with the Raspberry Pi.
 
 # Building and running
 Execute `make` to build GPIO-test.
