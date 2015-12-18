@@ -4,6 +4,8 @@
 #include <string>
 #include "GPIO.cpp"
 
+#include "/dev/zero"
+
 using namespace std;
 
 class EasyGPIO {
